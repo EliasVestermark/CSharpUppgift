@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 {
-    services.AddSingleton<IFileService>(new FileService(@"C:\Users\elias\source\repos\CSharpUppgift"));
+    services.AddSingleton<IFileService>(new FileService(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Adressbok")));
     services.AddSingleton<IContactService, ContactService>();
     services.AddSingleton<IMenuService, MenuService>();
 }).Build();

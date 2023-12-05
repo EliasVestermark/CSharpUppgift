@@ -119,8 +119,8 @@ public class MenuService : IMenuService
             case Enums.ServiceStatus.SUCCESS:
 
                 int index = 1;
-
-                if (result.Result is List<IContact> contactList)
+                
+                if (result.Result is IEnumerable<IContact> contactList)
                 {
                     bool run = true;
 
@@ -171,6 +171,7 @@ public class MenuService : IMenuService
             case Enums.ServiceStatus.FAILED:
                 Console.WriteLine("An error occured when trying to add the contact, please try again");
                 Console.WriteLine("Press any button to continue");
+                Console.ReadKey();
                 break;
         }
     }
@@ -235,17 +236,117 @@ public class MenuService : IMenuService
 
     private void ShowRemoveContactMenu(string name, string email)
     {
-        throw new NotImplementedException();
+        bool run = true;
+
+        while (run)
+        {
+            DisplayTitle("REMOVE EMPLOYEE");
+            Console.WriteLine($"Are you sure you want to remove \"{name}\" from the employee list? (y/n)");
+
+            var option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "y":
+                    var result = employeeService.RemoveEmployee(id);
+
+                    switch (result.Status)
+                    {
+                        case Enums.Status.SUCCESS:
+                            Console.WriteLine($"\"{name}\" has been removed from the employee list");
+                            Console.WriteLine("Press any key to go back to the list");
+                            Console.ReadKey();
+                            break;
+
+                        case Enums.Status.FAILED:
+                            Console.WriteLine("ERROR, oopsie");
+                            Console.WriteLine("Press any key to go back to the list");
+                            Console.ReadKey();
+                            break;
+
+                        case Enums.Status.NOT_FOUND:
+                            Console.WriteLine($"Employee \"{name}\", id: {id}, does not seem to exist");
+                            Console.WriteLine("Press any key to go back to the list");
+                            Console.ReadKey();
+                            break;
+                    }
+
+                    run = false;
+                    break;
+
+                case "n":
+                    run = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid option, press any key then try again");
+                    Console.ReadKey();
+                    break;
+            }
+        }
     }
 
     private void ShowUpdateContactMenu(string name, string email)
     {
-        throw new NotImplementedException();
+        DisplayTitle("UPDATE EMPLOYEE INFORMATION");
+
+        Console.Write("New Full Name: ");
+        var newName = Console.ReadLine()!;
+
+        Console.Write("New Position: ");
+        var newPosition = Console.ReadLine()!;
+
+        var result = employeeService.UpdateEmployee(id, newName, newPosition);
+
+        switch (result.Status)
+        {
+            case Enums.Status.SUCCESS:
+                Console.WriteLine("The employee information has been updates successfully");
+                Console.WriteLine("Press any key to go back to the list");
+                Console.ReadKey();
+                break;
+
+            case Enums.Status.FAILED:
+                Console.WriteLine("ERROR, oopsie");
+                Console.WriteLine("Press any key to go back to the list");
+                Console.ReadKey();
+                break;
+
+            case Enums.Status.NOT_FOUND:
+                Console.WriteLine($"Employee \"{oldName}\", id: {id}, does not seem to exist");
+                Console.WriteLine("Press any key to go back to the list");
+                Console.ReadKey();
+                break;
+        }
     }
 
     private void ShowExitMenu()
     {
-        throw new NotImplementedException();
+        bool run = true;
+
+        while (run)
+        {
+            DisplayTitle("EXIT APPLICATION");
+
+            Console.WriteLine("Are you sure you want to exit? (y/n)");
+            var option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "y":
+                    Environment.Exit(0);
+                    break;
+
+                case "n":
+                    run = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid option, press any key then try again");
+                    Console.ReadKey();
+                    break;
+            }
+        }
     }
 
     private void DisplayTitle(string title)
