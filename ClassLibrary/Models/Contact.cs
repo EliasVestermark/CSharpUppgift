@@ -10,4 +10,5 @@ public class Contact(string firstName, string lastName, int phoneNumber, string 
     public string Address { get; set; } = address;
     public int PostalCode { get; set; } = postalCode;
     public string City { get; set; } = city;
+
 }

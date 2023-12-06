@@ -228,8 +228,9 @@ public class MenuService : IMenuService
                 break;
 
             case Enums.ServiceStatus.FAILED:
-                Console.WriteLine("An error occured when trying to add the contact, please try again");
+                Console.WriteLine("An error occured when trying to update the contact.");
                 Console.WriteLine("Press any button to continue");
+                Console.ReadKey();
                 break;
         }
     }
@@ -240,7 +241,7 @@ public class MenuService : IMenuService
 
         while (run)
         {
-            DisplayTitle("REMOVE EMPLOYEE");
+            DisplayTitle("REMOVE CONTACT");
             Console.WriteLine($"Are you sure you want to remove \"{name}\" from the employee list? (y/n)");
 
             var option = Console.ReadLine();
@@ -248,24 +249,24 @@ public class MenuService : IMenuService
             switch (option)
             {
                 case "y":
-                    var result = employeeService.RemoveEmployee(id);
+                    var result = _contactService.RemoveContact(email);
 
                     switch (result.Status)
                     {
-                        case Enums.Status.SUCCESS:
+                        case Enums.ServiceStatus.SUCCESS:
                             Console.WriteLine($"\"{name}\" has been removed from the employee list");
                             Console.WriteLine("Press any key to go back to the list");
                             Console.ReadKey();
                             break;
 
-                        case Enums.Status.FAILED:
-                            Console.WriteLine("ERROR, oopsie");
+                        case Enums.ServiceStatus.FAILED:
+                            Console.WriteLine("An error occured when trying to remove the contact, please try again");
                             Console.WriteLine("Press any key to go back to the list");
                             Console.ReadKey();
                             break;
 
-                        case Enums.Status.NOT_FOUND:
-                            Console.WriteLine($"Employee \"{name}\", id: {id}, does not seem to exist");
+                        case Enums.ServiceStatus.NOT_FOUND:
+                            Console.WriteLine($"Employee \"{name}\", email: {email}, does not seem to exist");
                             Console.WriteLine("Press any key to go back to the list");
                             Console.ReadKey();
                             break;
@@ -288,7 +289,7 @@ public class MenuService : IMenuService
 
     private void ShowUpdateContactMenu(string name, string email)
     {
-        DisplayTitle("UPDATE EMPLOYEE INFORMATION");
+        DisplayTitle("UPDATE CONTACT INFORMATION");
 
         Console.Write("New Full Name: ");
         var newName = Console.ReadLine()!;
@@ -296,24 +297,24 @@ public class MenuService : IMenuService
         Console.Write("New Position: ");
         var newPosition = Console.ReadLine()!;
 
-        var result = employeeService.UpdateEmployee(id, newName, newPosition);
+        var result = _contactService.UpdateContact(email, newName, newPosition);
 
         switch (result.Status)
         {
-            case Enums.Status.SUCCESS:
+            case Enums.ServiceStatus.SUCCESS:
                 Console.WriteLine("The employee information has been updates successfully");
                 Console.WriteLine("Press any key to go back to the list");
                 Console.ReadKey();
                 break;
 
-            case Enums.Status.FAILED:
-                Console.WriteLine("ERROR, oopsie");
+            case Enums.ServiceStatus.FAILED:
+                Console.WriteLine("An error occured when trying to update the contact, please try again");
                 Console.WriteLine("Press any key to go back to the list");
                 Console.ReadKey();
                 break;
 
-            case Enums.Status.NOT_FOUND:
-                Console.WriteLine($"Employee \"{oldName}\", id: {id}, does not seem to exist");
+            case Enums.ServiceStatus.NOT_FOUND:
+                Console.WriteLine($"Employee \"{name}\", email: {email}, does not seem to exist");
                 Console.WriteLine("Press any key to go back to the list");
                 Console.ReadKey();
                 break;

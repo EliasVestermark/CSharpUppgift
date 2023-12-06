@@ -5,7 +5,6 @@ using ClassLibrary.Models;
 using ClassLibrary.Models.Responses;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Text.Json.Nodes;
 
 namespace ClassLibrary.Services;
 
@@ -25,8 +24,12 @@ public class ContactService : IContactService
         IServiceResult response = new ServiceResult();
         try
         {
+            var content = _fileService.GetContentFromFile();
+            _contacts = JsonConvert.DeserializeObject<List<Contact>>(content)!;
+
             if (!_contacts.Any(x => x.Email == contact.Email))
             {
+
                 _contacts.Add(contact);
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contacts));
                 response.Status = Enums.ServiceStatus.SUCCESS;
@@ -79,11 +82,15 @@ public class ContactService : IContactService
 
     public IServiceResult GetContactInformation(int option)
     {
+        var content = _fileService.GetContentFromFile();
+
         IServiceResult response = new ServiceResult();
         try
         {
+            List<Contact> contacts = JsonConvert.DeserializeObject<List<Contact>>(content)!;
+
             response.Status = Enums.ServiceStatus.SUCCESS;
-            response.Result = _contacts[option - 1];
+            response.Result = contacts[option - 1];
             return response;
         }
         catch (Exception ex)
@@ -94,28 +101,29 @@ public class ContactService : IContactService
         }
     }
 
-    public IServiceResult RemoveContact(string id)
+    public IServiceResult RemoveContact(string email) 
     {
         IServiceResult response = new ServiceResult();
         try
         {
-            var employeeToRemove = _employeeList.FirstOrDefault(x => x.Id == id);
+            var employeeToRemove = _contacts.FirstOrDefault(x => x.Email == email);
 
             if (employeeToRemove == null)
             {
-                response.Status = Enums.Status.NOT_FOUND;
+                response.Status = Enums.ServiceStatus.NOT_FOUND;
                 return response;
             }
             else
             {
-                _employeeList.Remove(employeeToRemove);
-                response.Status = Enums.Status.SUCCESS;
+                _contacts.Remove(employeeToRemove);
+                _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contacts));
+                response.Status = Enums.ServiceStatus.SUCCESS;
                 return response;
             }
         }
         catch
         {
-            response.Status = Enums.Status.FAILED;
+            response.Status = Enums.ServiceStatus.FAILED;
             return response;
         }
     }
@@ -125,24 +133,24 @@ public class ContactService : IContactService
         IServiceResult response = new ServiceResult();
         try
         {
-            var employeeToUpdate = _employeeList.FirstOrDefault(x => x.Id == id);
+            var employeeToUpdate = _contacts.FirstOrDefault(x => x.Email == id);
 
             if (employeeToUpdate == null)
             {
-                response.Status = Enums.Status.NOT_FOUND;
+                response.Status = Enums.ServiceStatus.NOT_FOUND;
                 return response;
             }
             else
             {
-                employeeToUpdate.Name = newName;
-                employeeToUpdate.Position = newPosition;
-                response.Status = Enums.Status.SUCCESS;
+                //employeeToUpdate.Name = newName;
+                //employeeToUpdate.Position = newPosition;
+                //response.Status = Enums.ServiceStatus.SUCCESS;
                 return response;
             }
         }
         catch
         {
-            response.Status = Enums.Status.FAILED;
+            response.Status = Enums.ServiceStatus.FAILED;
             return response;
         }
     }
