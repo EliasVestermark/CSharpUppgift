@@ -1,6 +1,9 @@
 ﻿
 namespace ClassLibrary.Enums;
 
+/// <summary>
+/// Enum with a few statuses
+/// </summary>
 public enum ServiceStatus
 {
     FAILED = 0,
