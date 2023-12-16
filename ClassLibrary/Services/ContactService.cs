@@ -1,5 +1,4 @@
 ﻿
-using AddressBookConsole.Interfaces;
 using ClassLibrary.Interfaces;
 using ClassLibrary.Models;
 using ClassLibrary.Enums;
@@ -28,14 +27,22 @@ public class ContactService : IContactService
     /// <summary>
     /// List for the contacts
     /// </summary>
-    private List<Contact> _contacts = [];
+    public List<IContact> Contacts { get; private set; } = new List<IContact>();
+
+    /// <summary>
+    /// Settings for json serializing
+    /// </summary>
+    private JsonSerializerSettings jsonSettings = new JsonSerializerSettings 
+    {
+        TypeNameHandling = TypeNameHandling.Objects
+    };
 
     /// <summary>
     /// Adds contact to the list and writes it to the jsonfile
     /// </summary>
     /// <param name="contact">Object that holds the contact provided by the AdContactMenu</param>
     /// <returns>ServiceResult containing a ServiceStatus depending on the outcome</returns>
-    public IServiceResult AddContact(Contact contact)
+    public IServiceResult AddContact(IContact contact)
     {
         IServiceResult response = new ServiceResult();
         try
@@ -43,10 +50,10 @@ public class ContactService : IContactService
             GetDataFromJSONFile();
 
             //If-statement that makes sure no contact with the same email already exists
-            if (!_contacts.Any(x => x.Email == contact.Email))
+            if (!Contacts.Any(x => x.Email == contact.Email))
             {
-                _contacts.Add(contact);
-                _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contacts));
+                Contacts.Add(contact);
+                _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
             }
@@ -79,10 +86,10 @@ public class ContactService : IContactService
             //Returns the list as a response.Result if not null or empty
             if (!string.IsNullOrEmpty(content))
             {
-                _contacts = JsonConvert.DeserializeObject<List<Contact>>(content)!;
+                Contacts = JsonConvert.DeserializeObject<List<IContact>>(content, jsonSettings)!;
 
                 response.Status = ServiceStatus.SUCCESS;
-                response.Result = _contacts;
+                response.Result = Contacts;
                 return response;
             }
 
@@ -111,7 +118,7 @@ public class ContactService : IContactService
             GetDataFromJSONFile();
             response.Status = ServiceStatus.SUCCESS;
             // - 1 since the _contacts list starts at 0 but the viual list in the menu starts at 1
-            response.Result = _contacts[option - 1];
+            response.Result = Contacts[option - 1];
             return response;
         }
         catch (Exception ex)
@@ -134,7 +141,7 @@ public class ContactService : IContactService
         try
         {
             GetDataFromJSONFile();
-            var contactToRemove = _contacts.FirstOrDefault(x => x.Email == email);
+            var contactToRemove = Contacts.FirstOrDefault(x => x.Email == email);
 
             if (contactToRemove == null)
             {
@@ -143,8 +150,8 @@ public class ContactService : IContactService
             }
             else
             {
-                _contacts.Remove(contactToRemove);
-                _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contacts));
+                Contacts.Remove(contactToRemove);
+                _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
             }
@@ -168,13 +175,13 @@ public class ContactService : IContactService
     /// <param name="newPostalCode">updated postal code</param>
     /// <param name="newCity">updated city</param>
     /// <returns>ServiceResult containing a ServiceStatus depending on the outcome</returns>
-    public IServiceResult UpdateContact(string email, string newFirstName, string newLastName, int newPhoneNumber, string newEmail, string newAddress, int newPostalCode, string newCity)
+    public IServiceResult UpdateContact(string email, string newFirstName, string newLastName, string newPhoneNumber, string newEmail, string newAddress, string newPostalCode, string newCity)
     {
         IServiceResult response = new ServiceResult();
         try
         {
             GetDataFromJSONFile();
-            var contactToUpdate = _contacts.FirstOrDefault(x => x.Email == email);
+            var contactToUpdate = Contacts.FirstOrDefault(x => x.Email == email);
 
             if (contactToUpdate == null)
             {
@@ -191,7 +198,7 @@ public class ContactService : IContactService
                 contactToUpdate.PostalCode = newPostalCode;
                 contactToUpdate.City = newCity;
 
-                _fileService.SaveContentToFile(JsonConvert.SerializeObject(_contacts));
+                _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
             }
@@ -207,15 +214,34 @@ public class ContactService : IContactService
     /// Method used by most other methodes to get the data from the jsonfile and store it in the _contacts list
     /// </summary>
     /// <returns>The updated _contacts list</returns>
-    public List<Contact> GetDataFromJSONFile()
+    public List<IContact> GetDataFromJSONFile()
     {
         var content = _fileService.GetContentFromFile();
 
         //Checks if the jsonfile is null or empty. If it is, an empty list is returned instead
         if (!string.IsNullOrEmpty(content))
         {
-            _contacts = JsonConvert.DeserializeObject<List<Contact>>(content)!;
+            Contacts = JsonConvert.DeserializeObject<List<IContact>>(content, jsonSettings)!;
         }
-        return _contacts;
+        return Contacts;
+    }
+
+    /// <summary>
+    /// Simple validation to make sure no letter in the postal code and phone number
+    /// </summary>
+    /// <param name="number">Number input to be validated</param>
+    /// <returns>True if all digits, else false</returns>
+    public bool NumberValidation(string number)
+    {
+        if (string.IsNullOrEmpty(number))
+        {
+            return true;
+        }
+        else if (number.All(char.IsDigit))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -7,7 +7,7 @@
         string Email { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
-        int PhoneNumber { get; set; }
-        int PostalCode { get; set; }
+        string PhoneNumber { get; set; }
+        string PostalCode { get; set; }
     }
 }

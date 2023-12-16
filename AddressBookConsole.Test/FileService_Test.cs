@@ -1,7 +1,5 @@
 ﻿
-using AddressBookConsole.Interfaces;
-using AddressBookConsole.Services;
-using ClassLibrary.Models;
+using ClassLibrary.Interfaces;
 using ClassLibrary.Services;
 
 namespace AddressBookConsole.Test;

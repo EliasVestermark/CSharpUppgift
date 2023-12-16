@@ -1,8 +1,8 @@
 ﻿
-using AddressBookConsole.Interfaces;
+using ClassLibrary.Interfaces;
 using System.Diagnostics;
 
-namespace AddressBookConsole.Services;
+namespace ClassLibrary.Services;
 
 /// <summary>
 /// Class for handling up and downloading to a jsonfile

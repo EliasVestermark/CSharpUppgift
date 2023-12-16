@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AddressBookMaui.ViewModels"
+             x:Class="AddressBookMaui.Views.AddContactPage"
+             x:DataType="{x:Type viewmodels:AddContactViewModel}"
+             Title="AddContactPage">
+
+    <ScrollView>
+        <Grid RowDefinitions="auto, *, auto" Margin="20">
+
+            <VerticalStackLayout Grid.Row="0">
+                <Label Text="First Name *" Margin="10"/>
+                <Entry x:Name="Entry_FirstName" Text="{Binding AddContactForm.FirstName}"/>
+
+                <Label Text="Last Name *" Margin="10"/>
+                <Entry x:Name="Entry_LastName" Text="{Binding AddContactForm.LastName}"/>
+
+                <Label Text="Email *" Margin="10"/>
+                <Entry x:Name="Entry_Email" Text="{Binding AddContactForm.Email}"/>
+
+                <Label Text="Phone Number" Margin="10"/>
+                <Entry x:Name="Entry_PhoneNumber" Text="{Binding AddContactForm.PhoneNumber}"/>
+
+                <Label Text="Address" Margin="10"/>
+                <Entry x:Name="Entry_Address" Text="{Binding AddContactForm.Address}"/>
+
+                <Label Text="Postal Code" Margin="10"/>
+                <Entry x:Name="Entry_PostalCode" Text="{Binding AddContactForm.PostalCode}"/>
+
+                <Label Text="City" Margin="10"/>
+                <Entry x:Name="Entry_City" Text="{Binding AddContactForm.City}"/>
+
+                <Button Command="{Binding AddContactToListCommand}" FontSize="18" Text="Add contact to list" Margin="0, 20, 0, 10" Padding="10"/>
+            </VerticalStackLayout>
+
+            <Label Grid.Row="1" FontSize="20" Text="{Binding StatusMessage}" HorizontalTextAlignment="Center" Margin="0, 0, 0, 10"/>
+
+            <Button Grid.Row="2" FontSize="20" Text="Show Contact List" Command="{Binding NavigateToListCommand}"/>
+        </Grid>
+    </ScrollView>
+</ContentPage>

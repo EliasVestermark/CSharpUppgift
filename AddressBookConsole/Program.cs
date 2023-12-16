@@ -1,5 +1,5 @@
 ﻿using AddressBookConsole.Interfaces;
-using AddressBookConsole.Services;
+using ClassLibrary.Interfaces;
 using ClassLibrary.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -1,12 +1,10 @@
 ﻿
-using AddressBookConsole.Interfaces;
 using ClassLibrary.Interfaces;
 using ClassLibrary.Models;
 using ClassLibrary.Enums;
 using ClassLibrary.Models.Responses;
 using ClassLibrary.Services;
 using Moq;
-using System;
 
 namespace AddressBookConsole.Test;
 
@@ -22,13 +20,13 @@ public class ContactService_Test
         // Arrange
         string firstName = "Elias";
         string lastName = "Vestermark";
-        int phoneNumber = 0701234567;
+        string phoneNumber = "0701234567";
         string email = "elias@domain.com";
         string address = "Falmark";
-        int postalCode = 123;
+        string postalCode = "123";
         string city = "Skellefteå";
 
-        Contact contact = new Contact(firstName, lastName, phoneNumber, email, address, postalCode, city);
+        IContact contact = new Contact(firstName, lastName, phoneNumber, email, address, postalCode, city);
 
         //Mocking to simulate filehandling
         var mockFileService = new Mock<IFileService>();

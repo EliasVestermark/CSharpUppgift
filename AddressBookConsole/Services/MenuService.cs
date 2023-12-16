@@ -1,5 +1,6 @@
 ﻿
 using AddressBookConsole.Interfaces;
+using ClassLibrary.Interfaces;
 using ClassLibrary.Models;
 
 namespace ClassLibrary.Services;
@@ -73,13 +74,13 @@ public class MenuService : IMenuService
         string lastName = Console.ReadLine()!;
 
         Console.Write("Phone Number: ");
-        bool validPhoneNumber = int.TryParse(Console.ReadLine(), out int phoneNumber);
+        string phoneNumber = Console.ReadLine()!;
 
-        //While loop to make sure input is only digits
-        while (!validPhoneNumber)
+        //Validation to make sure input is only digits
+        while (!_contactService.NumberValidation(phoneNumber!))
         {
             Console.Write("Please enter a valid phone number: ");
-            validPhoneNumber = int.TryParse(Console.ReadLine(), out phoneNumber);
+            phoneNumber = Console.ReadLine()!;
         }
 
         Console.Write("Email: ");
@@ -89,12 +90,13 @@ public class MenuService : IMenuService
         string address = Console.ReadLine()!;
 
         Console.Write("Postal Code: ");
-        bool validPostalCode = int.TryParse(Console.ReadLine(), out int postalCode);
+        string postalCode = Console.ReadLine()!;
 
-        while (!validPostalCode)
+        //Validation to make sure input is only digits
+        while (!_contactService.NumberValidation(postalCode!))
         {
-            Console.Write("Please enter a valid postal code: ");
-            validPostalCode = int.TryParse(Console.ReadLine(), out postalCode);
+            Console.Write("Please enter a valid postal code: : ");
+            postalCode = Console.ReadLine()!;
         }
 
         Console.Write("City: ");
@@ -144,7 +146,7 @@ public class MenuService : IMenuService
 
                     int index = 1;
 
-                    if (result.Result is List<Contact> contactList)
+                    if (result.Result is List<IContact> contactList)
                     {
                         if (!contactList.Any())
                         {
@@ -326,12 +328,13 @@ public class MenuService : IMenuService
         string newLastName = Console.ReadLine()!;
 
         Console.Write("Phone Number: ");
-        bool validPhoneNumber = int.TryParse(Console.ReadLine(), out int newPhoneNumber);
+        string newPhoneNumber = Console.ReadLine()!;
 
-        while (!validPhoneNumber)
+        //Validation to make sure input is only digits
+        while (!_contactService.NumberValidation(newPhoneNumber!))
         {
             Console.Write("Please enter a valid phone number: ");
-            validPhoneNumber = int.TryParse(Console.ReadLine(), out newPhoneNumber);
+            newPhoneNumber = Console.ReadLine()!;
         }
 
         Console.Write("Email: ");
@@ -341,12 +344,13 @@ public class MenuService : IMenuService
         string newAddress = Console.ReadLine()!;
 
         Console.Write("Postal Code: ");
-        bool validPostalCode = int.TryParse(Console.ReadLine(), out int newPostalCode);
+        string newPostalCode = Console.ReadLine()!;
 
-        while (!validPostalCode)
+        //Validation to make sure input is only digits
+        while (!_contactService.NumberValidation(newPostalCode!))
         {
-            Console.Write("Please enter a valid postal code: ");
-            validPostalCode = int.TryParse(Console.ReadLine(), out newPostalCode);
+            Console.Write("Please enter a valid postal code: : ");
+            newPostalCode = Console.ReadLine()!;
         }
 
         Console.Write("City: ");

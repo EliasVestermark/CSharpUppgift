@@ -1,5 +1,5 @@
 ﻿
-namespace AddressBookConsole.Interfaces;
+namespace ClassLibrary.Interfaces;
 
 public interface IFileService
 {

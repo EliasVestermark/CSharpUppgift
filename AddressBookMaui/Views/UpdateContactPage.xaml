@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels ="clr-namespace:AddressBookMaui.ViewModels"
+             x:Class="AddressBookMaui.Views.UpdateContactPage"
+             x:DataType="{x:Type viewmodels:UpdateContactViewModel}"
+             Title="UpdateContactPage">
+
+    <ScrollView>
+        <Grid RowDefinitions="auto, *, auto" Margin="20">
+
+            <VerticalStackLayout Grid.Row="0">
+
+                <Label FontSize="14" Text="Name:"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.FullName}"/>
+
+                <Label FontSize="14" Text="Contact information:" Margin="0, 20, 0, 0"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.Email}"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.PhoneNumber}"/>
+
+                <Label FontSize="14" Text="Address:" Margin="0, 20, 0, 0"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.Address}"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.PostalCode}"/>
+                <Label FontSize="22" Text="{Binding ContactDetails.City}"/>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1">
+                <Label FontSize="18" Text="You can update this contact below" Margin="0, 20"/>
+
+                <Label Text="New First Name *" Margin="10"/>
+                <Entry x:Name="Entry_FirstName" Text="{Binding UpdatedContact.FirstName}"/>
+
+                <Label Text="New Last Name *" Margin="10"/>
+                <Entry x:Name="Entry_LastName" Text="{Binding UpdatedContact.LastName}"/>
+
+                <Label Text="New Email *" Margin="10"/>
+                <Entry x:Name="Entry_Email" Text="{Binding UpdatedContact.Email}"/>
+
+                <Label Text="New Phone Number" Margin="10"/>
+                <Entry x:Name="Entry_PhoneNumber" Text="{Binding UpdatedContact.PhoneNumber}"/>
+
+                <Label Text="New Address" Margin="10"/>
+                <Entry x:Name="Entry_Address" Text="{Binding UpdatedContact.Address}"/>
+
+                <Label Text="New Postal Code" Margin="10"/>
+                <Entry x:Name="Entry_PostalCode" Text="{Binding UpdatedContact.PostalCode}"/>
+
+                <Label Text="New City" Margin="10"/>
+                <Entry x:Name="Entry_City" Text="{Binding UpdatedContact.City}"/>
+
+                <Button Command="{Binding UpdateContactCommand}" FontSize="18" Text="Update contact" Margin="0, 20, 0, 10" Padding="10"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="2">
+                <Label FontSize="22" Text="Confirm the contact email to remove this contact"/>
+                <Entry Text="{Binding EntryEmail}"/>
+                <Button Margin="0, 20" CommandParameter="{Binding ContactDetails}" Command="{Binding RemoveContactFromListCommand}" Grid.Row="1" Text="Delete" FontSize="20"/>
+                <Label  FontSize="20" Text="{Binding StatusMessage}" HorizontalTextAlignment="Center" Margin="0, 10, 0, 10"/>
+                <Button Grid.Row="2" FontSize="20" Text="Show Contact List" Command="{Binding NavigateToListCommand}" Margin="0, 20, 0, 0"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

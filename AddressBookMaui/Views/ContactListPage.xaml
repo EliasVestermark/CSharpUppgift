@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AddressBookMaui.ViewModels"
+             xmlns:models="clr-namespace:ClassLibrary.Models;assembly=ClassLibrary"
+             x:Class="AddressBookMaui.Views.ContactListPage"
+             x:DataType="{x:Type viewmodels:ContactListViewModel}"
+             Title="ContactListPage">
+    <ScrollView>
+        <Grid RowDefinitions="*, auto" Margin="20">
+
+            <CollectionView Grid.Row="0" ItemsSource="{Binding ContactList}" >
+
+                <CollectionView.ItemTemplate >
+                    <DataTemplate x:DataType="{x:Type models:Contact}">
+
+                        <Grid ColumnDefinitions="auto, *, auto">
+
+                            <Label Grid.Column="0" Text="{Binding Index}" Margin="0, 0, 10, 0" FontSize="20"/>
+
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="22"/>
+                                <Label Text="{Binding PhoneNumber}" FontSize="22"/>
+                            </VerticalStackLayout>
+                            <Button CommandParameter="{Binding .}" Command="{Binding Path=NavigateToUpdateContactCommand, Source={RelativeSource AncestorType={x:Type viewmodels:ContactListViewModel}}}" Margin="0, 0, 10, 0" Grid.Column="2" Text="Edit" FontSize="20"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+
+            </CollectionView>
+            
+            <Button Grid.Row="2" FontSize="20" Text="Add Contact" Command="{Binding NavigateToAddContactCommand}"/>
+        </Grid>
+    </ScrollView>
+</ContentPage>
