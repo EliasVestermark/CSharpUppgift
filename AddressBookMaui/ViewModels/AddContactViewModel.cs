@@ -11,8 +11,15 @@ namespace AddressBookMaui.ViewModels;
 
 public partial class AddContactViewModel : ObservableObject
 {
+    /// <summary>
+    /// A field, type IContactService,to be used to reach the instance of ContactService created by DI
+    /// </summary>
     private readonly IContactService _contactService;
 
+    /// <summary>
+    /// Constructor that takes a param then saves the value of the param to the field _contactService
+    /// </summary>
+    /// <param name="contactService">IContactService</param>
     public AddContactViewModel(IContactService contactService)
     {
         _contactService = contactService;
@@ -27,6 +34,9 @@ public partial class AddContactViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<IContact> _contactList = [];
 
+    /// <summary>
+    /// Adds a contact to list throught AddContact, simple required field validation as well as digit validation if phone number or postal code are entered
+    /// </summary>
     [RelayCommand]
     public void AddContactToList()
     {
@@ -64,18 +74,27 @@ public partial class AddContactViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Navigates to ContactListPage
+    /// </summary>
     [RelayCommand]
     private async Task NavigateToList()
     {
         await Shell.Current.GoToAsync("ContactListPage");
     }
 
+    /// <summary>
+    /// Two seconds delay before the status message is "removed" by using an empty string
+    /// </summary>
     private async void ResetStatusMessage()
     {
         await Task.Delay(2000);
         StatusMessage = "";
     }
 
+    /// <summary>
+    /// Updates the Observable property list with the list from the jsonfile
+    /// </summary>
     private void UpdateContactsList()
     {
         ContactList = new ObservableCollection<IContact>(_contactService.Contacts.ToList());

@@ -8,6 +8,7 @@ namespace AddressBookMaui
 {
     public static class MauiProgram
     {
+        //Dependency injection to create and handle instances of different classes
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -25,7 +26,7 @@ namespace AddressBookMaui
             builder.Services.AddSingleton<UpdateContactViewModel>();
             builder.Services.AddSingleton<AddContactPage>();
             builder.Services.AddSingleton<AddContactViewModel>();
-            builder.Services.AddSingleton<IFileService>(new FileService(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Adressbok")));
+            builder.Services.AddSingleton<IFileService>(new FileService(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Adressbok")));
             builder.Services.AddSingleton<IContactService, ContactService>();
 
             builder.Logging.AddDebug();

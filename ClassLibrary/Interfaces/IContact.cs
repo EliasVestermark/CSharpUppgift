@@ -9,5 +9,7 @@
         string LastName { get; set; }
         string PhoneNumber { get; set; }
         string PostalCode { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+
     }
 }

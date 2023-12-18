@@ -1,19 +1,28 @@
 ﻿
 using ClassLibrary.Interfaces;
+using ClassLibrary.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel.Communication;
-using System.Diagnostics;
 using Contact = ClassLibrary.Models.Contact;
 
 namespace AddressBookMaui.ViewModels;
 
-[QueryProperty(nameof(ContactDetails), nameof(ContactDetails))]
+/// <summary>
+/// QueryProperty, contains an object and is passed during navigation. The object is stored in the IContact ContactDetails
+/// </summary>
+//[QueryProperty(nameof(ContactDetails), nameof(ContactDetails))]
 
-public partial class UpdateContactViewModel : ObservableObject
+public partial class UpdateContactViewModel : ObservableObject, IQueryAttributable
 {
+    /// <summary>
+    /// A field, type IContactService,to be used to reach the instance of ContactService created by DI
+    /// </summary>
     private readonly IContactService _contactService;
 
+    /// <summary>
+    /// Constructor that takes a param then saves the value of the param to the field _contactService
+    /// </summary>
+    /// <param name="contactService">IContactService</param>
     public UpdateContactViewModel(IContactService contactService)
     {
         _contactService = contactService;
@@ -31,6 +40,10 @@ public partial class UpdateContactViewModel : ObservableObject
     [ObservableProperty]
     private string _statusMessage = null!;
 
+    /// <summary>
+    /// Method that is called by pressing a button in the program. Uses UpdateContact to update by providing with the user input values. 
+    /// Updates the visible information or shows a status message depending on the result.Status.
+    /// </summary>
     [RelayCommand]
     private void UpdateContact()
     {
@@ -40,7 +53,7 @@ public partial class UpdateContactViewModel : ObservableObject
         {
             case ClassLibrary.Enums.ServiceStatus.SUCCESS:
                 ContactDetails = UpdatedContact;
-                UpdatedContact = new();
+                UpdatedContact = new Contact();
                 break;
 
             case ClassLibrary.Enums.ServiceStatus.NOT_FOUND:
@@ -48,13 +61,18 @@ public partial class UpdateContactViewModel : ObservableObject
                 break;
 
             case ClassLibrary.Enums.ServiceStatus.FAILED:
-                StatusMessage = "Ann error occurred when trying to update the contact";
+                StatusMessage = "An error occurred when trying to update the contact";
                 break;
         }
     }
 
+    /// <summary>
+    /// Method that is called by pressing a button in the program. Uses RemoveContact to remove the current contact provided that the email matches the user input. 
+    /// Goes back to the contact list or shows a status message depending on the result.Status.
+    /// </summary>
+    /// <param name="contact">Contact to be removed, provided by CommandParameter</param>
     [RelayCommand]
-    private void RemoveContactFromList(Contact contact)
+    public void RemoveContactFromList(IContact contact)
     {
         if (contact.Email == EntryEmail)
         {
@@ -63,7 +81,7 @@ public partial class UpdateContactViewModel : ObservableObject
             switch (result.Status)
             {
                 case ClassLibrary.Enums.ServiceStatus.SUCCESS:
-                    EntryEmail = "";
+                    EntryEmail = string.Empty;
                     NavigateToList();
                     break;
 
@@ -72,7 +90,7 @@ public partial class UpdateContactViewModel : ObservableObject
                     break;
 
                 case ClassLibrary.Enums.ServiceStatus.FAILED:
-                    StatusMessage = "Ann error occurred when trying to delete the contact";
+                    StatusMessage = "An error occurred when trying to delete the contact";
                     break;
             }
         }
@@ -82,15 +100,26 @@ public partial class UpdateContactViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Navigates to root AddContactPage
+    /// </summary>
     [RelayCommand]
     private async Task NavigateToAddContact()
     {
         await Shell.Current.GoToAsync("//AddContactPage");
     }
 
+    /// <summary>
+    /// Navigates to ContactListPage
+    /// </summary>
     [RelayCommand]
     private async Task NavigateToList()
     {
         await Shell.Current.GoToAsync("ContactListPage");
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        ContactDetails = (query["ContactDetails"] as Contact)!;
     }
 }

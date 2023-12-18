@@ -4,7 +4,11 @@ namespace AddressBookMaui.Views;
 
 public partial class ContactListPage : ContentPage
 {
-	public ContactListPage(ContactListViewModel viewModel)
+    /// <summary>
+    /// Binds the viewmodel to the corresponding page
+    /// </summary>
+    /// <param name="viewModel">ContactListViewModel</param>
+    public ContactListPage(ContactListViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;

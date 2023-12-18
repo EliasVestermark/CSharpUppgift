@@ -4,6 +4,9 @@ namespace AddressBookMaui
 {
     public partial class AppShell : Shell
     {
+        /// <summary>
+        /// Resgisters the routing routes for each page, used for shell navigation
+        /// </summary>
         public AppShell()
         {
             InitializeComponent();

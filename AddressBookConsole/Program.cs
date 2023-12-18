@@ -7,8 +7,7 @@ using Microsoft.Extensions.Hosting;
 //Dependency injection to create and handle instances of different classes
 var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 {
-    //Jag använder filepath till /AppData/Roaming för det var den enda mappen jag inte blev nekad tillgång till fast jag kör som admin
-    services.AddSingleton<IFileService>(new FileService(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Adressbok")));
+    services.AddSingleton<IFileService>(new FileService(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Adressbok")));
     services.AddSingleton<IContactService, ContactService>();
     services.AddSingleton<IMenuService, MenuService>();
 }).Build();

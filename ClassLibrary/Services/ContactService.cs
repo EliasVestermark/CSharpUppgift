@@ -29,6 +29,8 @@ public class ContactService : IContactService
     /// </summary>
     public List<IContact> Contacts { get; private set; } = new List<IContact>();
 
+    public event EventHandler? ContactsUpdated;
+
     /// <summary>
     /// Settings for json serializing
     /// </summary>
@@ -53,6 +55,7 @@ public class ContactService : IContactService
             if (!Contacts.Any(x => x.Email == contact.Email))
             {
                 Contacts.Add(contact);
+                //ContactsUpdated?.Invoke(this, new EventArgs());
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
@@ -151,6 +154,7 @@ public class ContactService : IContactService
             else
             {
                 Contacts.Remove(contactToRemove);
+                ContactsUpdated?.Invoke(this, new EventArgs());
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
@@ -198,6 +202,7 @@ public class ContactService : IContactService
                 contactToUpdate.PostalCode = newPostalCode;
                 contactToUpdate.City = newCity;
 
+                ContactsUpdated?.Invoke(this, new EventArgs());
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
