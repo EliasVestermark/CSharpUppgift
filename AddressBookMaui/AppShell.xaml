@@ -11,8 +11,8 @@
     Shell.NavBarIsVisible="False"
     Title="AddressBookMaui">
 
-    <ShellContent Title="Add Contact" ContentTemplate="{DataTemplate pages:AddContactPage}" Route="AddContactPage" />
     <ShellContent Title="Contact List" ContentTemplate="{DataTemplate pages:ContactListPage}" Route="ContactListPage" />
+    <ShellContent Title="Add Contact" ContentTemplate="{DataTemplate pages:AddContactPage}" Route="AddContactPage" />
     <ShellContent Title="Update Contact" ContentTemplate="{DataTemplate pages:UpdateContactPage}" Route="UpdateContactPage" />
 
 </Shell>

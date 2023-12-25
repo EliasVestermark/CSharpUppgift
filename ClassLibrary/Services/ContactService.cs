@@ -154,7 +154,7 @@ public class ContactService : IContactService
             else
             {
                 Contacts.Remove(contactToRemove);
-                ContactsUpdated?.Invoke(this, new EventArgs());
+                //ContactsUpdated?.Invoke(this, new EventArgs());
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
@@ -202,7 +202,6 @@ public class ContactService : IContactService
                 contactToUpdate.PostalCode = newPostalCode;
                 contactToUpdate.City = newCity;
 
-                ContactsUpdated?.Invoke(this, new EventArgs());
                 _fileService.SaveContentToFile(JsonConvert.SerializeObject(Contacts, jsonSettings));
                 response.Status = ServiceStatus.SUCCESS;
                 return response;
